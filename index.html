@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Service Cost Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient to bottom right, #0a0a0a, #333333;
+            color: #00ffc0;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, #00ffc0 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            from { background-position: 0 0; }
+            to { background-position: 100% 100%; }
+        }
+
+        .calculator-container {
+            background-color: rgba(10, 25, 40, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(0, 255, 192, 0.5);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            border: 2px solid #00ffc0;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #00ffc0;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(0, 255, 192, 0.7);
+            font-size: 2.2em;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #00ffc0;
+            font-size: 1.1em;
+        }
+
+        select, input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #00ffc0;
+            border-radius: 8px;
+            background-color: #051a2e;
+            color: #00ffc0;
+            font-size: 1em;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+            box-shadow: inset 0 0 8px rgba(0, 255, 192, 0.3);
+        }
+
+        select:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #00ffd5;
+            box-shadow: 0 0 15px rgba(0, 255, 213, 0.7);
+        }
+
+        .calculate-btn {
+            background-color: #00ffc0;
+            color: #051a2e;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 192, 0.5);
+        }
+
+        .calculate-btn:hover {
+            background-color: #00ffd5;
+            box-shadow: 0 0 30px rgba(0, 255, 213, 0.8);
+            transform: translateY(-3px);
+        }
+
+        .results {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px dashed #00ffc0;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        .results p {
+            margin-bottom: 12px;
+            color: #e0fff8;
+        }
+
+        .results strong {
+            color: #00ffc0;
+            font-size: 1.2em;
+        }
+
+        .advance-info {
+            font-size: 0.9em;
+            color: #ff6347;
+            margin-top: 20px;
+            border-top: 1px dotted #ff6347;
+            padding-top: 15px;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .drone-animation {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateDrone 4s linear infinite;
+        }
+
+        .drone-body {
+            width: 80px;
+            height: 30px;
+            background-color: #00ffc0;
+            position: absolute;
+            top: 60px;
+            left: 35px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 192, 0.7);
+        }
+
+        .propeller-arm {
+            position: absolute;
+            width: 10px;
+            height: 80px;
+            background-color: #555;
+            border-radius: 5px;
+            transform-origin: bottom center;
+        }
+
+        .propeller-arm.left-front { transform: rotate(-45deg); top: 20px; left: 20px; }
+        .propeller-arm.right-front { transform: rotate(45deg); top: 20px; right: 20px; }
+        .propeller-arm.left-back { transform: rotate(-135deg); bottom: 20px; left: 20px; }
+        .propeller-arm.right-back { transform: rotate(135deg); bottom: 20px; right: 20px; }
+
+
+        .propeller {
+            width: 60px;
+            height: 8px;
+            background-color: #eee;
+            position: absolute;
+            border-radius: 4px;
+            top: -10px;
+            left: calc(50% - 30px);
+            animation: spinPropeller 0.5s linear infinite;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .propeller-arm.left-front .propeller { top: -10px; }
+        .propeller-arm.right-front .propeller { top: -10px; }
+        .propeller-arm.left-back .propeller { bottom: -10px; top: unset; }
+        .propeller-arm.right-back .propeller { bottom: -10px; top: unset; }
+
+
+        @keyframes spinPropeller {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotateDrone {
+            0% { transform: rotateY(0deg) rotateX(0deg); }
+            50% { transform: rotateY(180deg) rotateX(10deg); }
+            100% { transform: rotateY(360deg) rotateX(0deg); }
+        }
+
+        .loading-text {
+            color: #00ffc0;
+            font-size: 1.5em;
+            margin-top: 30px;
+            animation: pulseText 1.5s infinite alternate;
+        }
+
+        @keyframes pulseText {
+            from { opacity: 0.7; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="drone-animation">
+            <div class="drone-body"></div>
+            <div class="propeller-arm left-front">
+                <div class="propeller"></div>
+            </div>
+            <div class="propeller-arm right-front">
+                <div class="propeller"></div>
+            </div>
+            <div class="propeller-arm left-back">
+                <div class="propeller"></div>
+            </div>
+            <div class="propeller-arm right-back">
+                <div class="propeller"></div>
+            </div>
+        </div>
+        <div class="loading-text">Launching Drone...</div>
+    </div>
+
+    <div class="background-effect"></div>
+
+    <div class="calculator-container" style="display: none;">
+        <h1>Drone Service Cost Calculator</h1>
+
+        <div class="input-group">
+            <label for="eventType">Select Event Type:</label>
+            <select id="eventType">
+                <option value="">-- Choose Event --</option>
+                <option value="wedding">Wedding / Pre-shoot - LKR 25,000</option>
+                <option value="birthday">Birthday - LKR 25,000</option>
+                <option value="sportMeet">Sport Meet - LKR 35,000</option>
+                <option value="musicEvent">Music Event - LKR 35,000</option>
+                <option value="propertyShowcasing">Property Showcasing (Sale/Rent) - LKR 25,000</option>
+                <option value="other">Other - Please Discuss</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="location">Select Location (Travel Cost from Colombo):</label>
+            <select id="location">
+                <option value="">-- Choose Location --</option>
+                <option value="Galle">Galle - Rs. 1930</option>
+                <option value="Matara">Matara - Rs. 2240</option>
+                <option value="Hakmana">Hakmana - Rs. 2410</option>
+                <option value="Middeniya">Middeniya - Rs. 2670</option>
+                <option value="Embilipitiya">Embilipitiya - Rs. 2660</option>
+                <option value="Akuressa">Akuressa - Rs. 2210</option>
+                <option value="Weeraketiya">Weeraketiya - Rs. 2540</option>
+                <option value="Tharagama">Tharagama - Rs. 3040</option>
+                <option value="Kekanadura">Kekanadura - Rs. 2490</option>
+                <option value="Elpitiya">Elpitiya - Rs. 1850</option>
+                <option value="Baddegama">Baddegama - Rs. 1780</option>
+                <option value="Ambalangoda">Ambalangoda - Rs. 1750</option>
+                <option value="Kamburupitiya">Kamburupitiya - Rs. 2900</option>
+                <option value="Keiyiyangoda">Keiyiyangoda - Rs. 2490</option>
+                <option value="Deniyaya">Deniyaya - Rs. 3040</option>
+                <option value="Panadura (via express)">Panadura (via express) - Rs. 2100</option>
+                <option value="Kurunegala (via E-Way)">Kurunegala (via E-Way) - Rs. 1850</option>
+                <option value="Ampara">Ampara - Rs. 3920</option>
+                <option value="Akkaraipaththu">Akkaraipaththu - Rs. 4030</option>
+                <option value="Makandura">Makandura - Rs. 3470</option>
+                <option value="Nuwara Eliya (Other)">Nuwara Eliya (Other) - Rs. 2740</option>
+                <option value="Anuradhapura (Other)">Anuradhapura (Other) - Rs. 2920</option>
+                <option value="Polonnaruwa (Other)">Polonnaruwa (Other) - Rs. 2860</option>
+                <option value="Trincomalee (Other)">Trincomalee (Other) - Rs. 3095</option>
+                <option value="Batticaloa (Other)">Batticaloa (Other) - Rs. 3215</option>
+                <option value="Kandy (Other)">Kandy (Other) - Rs. 2060</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="shootingDays">Number of Shooting Days:</label>
+            <input type="number" id="shootingDays" min="1" value="1">
+            <small style="color: #aaa; display: block; margin-top: 5px;">
+                *1 day: Free (Approval from Defence Ministry)<br>
+                *2 days: LKR 600 (Approval from Defence Ministry)<br>
+                *3 days: LKR 960 (Approval from Defence Ministry)
+            </small>
+        </div>
+
+        <button class="calculate-btn" onclick="calculateCost()">Calculate Cost</button>
+
+        <div class="results" id="results" style="display: none;">
+            <p><strong>Total Estimated Price:</strong> <span id="totalPrice"></span></p>
+            <p><strong>Required Advance Payment:</strong> <span id="advancePayment"></span></p>
+            <p class="advance-info">
+                *Advance is refundable only before paying to CAA and Defence Ministry approval. After that, it is not refundable.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const eventPrices = {
+            wedding: 25000,
+            birthday: 25000,
+            sportMeet: 35000,
+            musicEvent: 35000,
+            propertyShowcasing: 25000,
+            other: 0 // "Other" will require discussion, so 0 for base calculation
+        };
+
+        // Travel costs are directly from the provided document 
+        const travelCosts = {
+            "Galle": 1930,
+            "Matara": 2240,
+            "Hakmana": 2410,
+            "Middeniya": 2670,
+            "Embilipitiya": 2660,
+            "Akuressa": 2210,
+            "Weeraketiya": 2540,
+            "Tharagama": 3040,
+            "Kekanadura": 2490,
+            "Elpitiya": 1850,
+            "Baddegama": 1780,
+            "Ambalangoda": 1750,
+            "Kamburupitiya": 2900,
+            "Keiyiyangoda": 2490,
+            "Deniyaya": 3040,
+            "Panadura (via express)": 2100,
+            "Kurunegala (via E-Way)": 1850,
+            "Ampara": 3920,
+            "Akkaraipaththu": 4030,
+            "Makandura": 3470,
+            "Nuwara Eliya (Other)": 2740,
+            "Anuradhapura (Other)": 2920,
+            "Polonnaruwa (Other)": 2860,
+            "Trincomalee (Other)": 3095,
+            "Batticaloa (Other)": 3215,
+            "Kandy (Other)": 2060
+        };
+
+        const shootingDayCosts = {
+            1: 0,
+            2: 600,
+            3: 960
+        };
+
+        const advancePayments = {
+            1: 5000,
+            2: 7000,
+            3: 7000 // For 3 days, advance is still 7000 as per common structure for multi-day
+        };
+
+        function calculateCost() {
+            const eventType = document.getElementById('eventType').value;
+            const location = document.getElementById('location').value;
+            const shootingDays = parseInt(document.getElementById('shootingDays').value);
+
+            if (!eventType) {
+                alert('Please select an event type.');
+                return;
+            }
+            if (!location) {
+                alert('Please select a location.');
+                return;
+            }
+            if (shootingDays < 1) {
+                alert('Number of shooting days must be at least 1.');
+                return;
+            }
+
+            let baseCost = eventPrices[eventType];
+            let travelCost = travelCosts[location] || 0; // Default to 0 if location not found
+
+            let dayCost = 0;
+            if (shootingDays in shootingDayCosts) {
+                dayCost = shootingDayCosts[shootingDays];
+            } else if (shootingDays > 3) {
+                // For more than 3 days, you might want to define a specific logic
+                // For now, let's assume it caps at 3 days cost or scales.
+                // As per requirement, only 1, 2, 3 days costs are given.
+                // Let's keep it simple and advise discussion for >3 days.
+                alert("For more than 3 shooting days, please contact us for a custom quote regarding the Defence Ministry approval cost.");
+                dayCost = shootingDayCosts[3]; // Assume max cost for calculation
+            }
+
+            const totalEstimatedPrice = baseCost + travelCost + dayCost;
+
+            let advance = 0;
+            if (shootingDays === 1) {
+                advance = advancePayments[1];
+            } else if (shootingDays >= 2) {
+                advance = advancePayments[2]; // For 2 or more days, it's 7000 LKR
+            }
+
+            document.getElementById('totalPrice').innerText = `LKR ${totalEstimatedPrice.toLocaleString()}/=`;
+            document.getElementById('advancePayment').innerText = `LKR ${advance.toLocaleString()}/=`;
+            document.getElementById('results').style.display = 'block';
+        }
+
+        // Loading screen logic
+        window.addEventListener('load', () => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const calculatorContainer = document.querySelector('.calculator-container');
+            
+            setTimeout(() => {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    calculatorContainer.style.display = 'block';
+                }, 500); // Wait for the fade out to complete
+            }, 2000); // Display loading screen for 2 seconds
+        });
+    </script>
+</body>
+</html>
