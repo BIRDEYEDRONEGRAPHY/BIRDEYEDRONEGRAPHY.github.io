@@ -6,14 +6,23 @@
     <title>Drone Service Cost Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #00ffc0;
+            --secondary-color: #051a2e;
+            --accent-color: #00ffd5;
+            --text-color: #e0fff8;
+            --background-dark: #0a0a0a;
+            --error-color: #ff6347;
+        }
+
         body {
             font-family: 'Orbitron', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient to bottom right, #0a0a0a, #333333;
-            color: #00ffc0;
+            background: linear-gradient(to bottom right, var(--background-dark), #333333);
+            color: var(--primary-color);
             margin: 0;
             overflow: hidden;
             position: relative;
@@ -23,7 +32,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(circle, #00ffc0 1px, transparent 1px);
+            background-image: radial-gradient(circle, var(--primary-color) 1px, transparent 1px);
             background-size: 20px 20px;
             opacity: 0.1;
             animation: moveBackground 20s linear infinite;
@@ -42,10 +51,11 @@
             width: 90%;
             max-width: 600px;
             text-align: center;
-            border: 2px solid #00ffc0;
+            border: 2px solid var(--primary-color);
             position: relative;
             z-index: 1;
             animation: fadeIn 1s ease-out;
+            box-sizing: border-box; /* Include padding in width */
         }
 
         @keyframes fadeIn {
@@ -54,7 +64,7 @@
         }
 
         h1 {
-            color: #00ffc0;
+            color: var(--primary-color);
             margin-bottom: 30px;
             text-shadow: 0 0 15px rgba(0, 255, 192, 0.7);
             font-size: 2.2em;
@@ -68,35 +78,36 @@
         label {
             display: block;
             margin-bottom: 10px;
-            color: #00ffc0;
+            color: var(--primary-color);
             font-size: 1.1em;
         }
 
         select, input[type="number"] {
-            width: calc(100% - 20px);
+            width: 100%; /* Make them full width */
             padding: 12px;
             margin-top: 5px;
-            border: 1px solid #00ffc0;
+            border: 1px solid var(--primary-color);
             border-radius: 8px;
-            background-color: #051a2e;
-            color: #00ffc0;
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
             font-size: 1em;
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
             cursor: pointer;
             box-shadow: inset 0 0 8px rgba(0, 255, 192, 0.3);
+            box-sizing: border-box; /* Include padding in width */
         }
 
         select:focus, input[type="number"]:focus {
             outline: none;
-            border-color: #00ffd5;
+            border-color: var(--accent-color);
             box-shadow: 0 0 15px rgba(0, 255, 213, 0.7);
         }
 
         .calculate-btn {
-            background-color: #00ffc0;
-            color: #051a2e;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
             padding: 15px 30px;
             border: none;
             border-radius: 8px;
@@ -105,10 +116,12 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 0 20px rgba(0, 255, 192, 0.5);
+            width: 100%; /* Full width button for better mobile usability */
+            max-width: 300px; /* Limit max width for larger screens */
         }
 
         .calculate-btn:hover {
-            background-color: #00ffd5;
+            background-color: var(--accent-color);
             box-shadow: 0 0 30px rgba(0, 255, 213, 0.8);
             transform: translateY(-3px);
         }
@@ -116,27 +129,34 @@
         .results {
             margin-top: 30px;
             padding-top: 25px;
-            border-top: 1px dashed #00ffc0;
+            border-top: 1px dashed var(--primary-color);
             text-align: left;
             font-size: 1.1em;
         }
 
         .results p {
             margin-bottom: 12px;
-            color: #e0fff8;
+            color: var(--text-color);
         }
 
         .results strong {
-            color: #00ffc0;
+            color: var(--primary-color);
             font-size: 1.2em;
         }
 
         .advance-info {
             font-size: 0.9em;
-            color: #ff6347;
+            color: var(--error-color);
             margin-top: 20px;
-            border-top: 1px dotted #ff6347;
+            border-top: 1px dotted var(--error-color);
             padding-top: 15px;
+        }
+
+        small {
+            color: #aaa;
+            display: block;
+            margin-top: 5px;
+            font-size: 0.9em;
         }
 
         /* Loading Screen */
@@ -146,7 +166,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #0a0a0a;
+            background-color: var(--background-dark);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -166,7 +186,7 @@
         .drone-body {
             width: 80px;
             height: 30px;
-            background-color: #00ffc0;
+            background-color: var(--primary-color);
             position: absolute;
             top: 60px;
             left: 35px;
@@ -219,7 +239,7 @@
         }
 
         .loading-text {
-            color: #00ffc0;
+            color: var(--primary-color);
             font-size: 1.5em;
             margin-top: 30px;
             animation: pulseText 1.5s infinite alternate;
@@ -228,6 +248,120 @@
         @keyframes pulseText {
             from { opacity: 0.7; }
             to { opacity: 1; }
+        }
+
+        /* --- Media Queries for Responsiveness --- */
+
+        /* Tablets and smaller desktops (768px - 1024px) */
+        @media (max-width: 1024px) {
+            .calculator-container {
+                padding: 30px;
+                max-width: 550px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            label {
+                font-size: 1em;
+            }
+            select, input[type="number"] {
+                padding: 10px;
+                font-size: 0.95em;
+            }
+            .calculate-btn {
+                padding: 12px 25px;
+                font-size: 1.2em;
+            }
+            .results {
+                font-size: 1em;
+            }
+            .results strong {
+                font-size: 1.1em;
+            }
+            .advance-info {
+                font-size: 0.85em;
+            }
+        }
+
+        /* Mobile devices (up to 767px) */
+        @media (max-width: 767px) {
+            body {
+                align-items: flex-start; /* Align to top for scrolling on small screens */
+                padding-top: 30px;
+                padding-bottom: 30px;
+                overflow-y: auto; /* Enable vertical scrolling */
+            }
+            .calculator-container {
+                padding: 20px;
+                width: 95%; /* More width for smaller screens */
+                max-width: none; /* Remove max-width restriction */
+                margin: 20px auto; /* Center with margin */
+            }
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+            .input-group {
+                margin-bottom: 20px;
+            }
+            label {
+                font-size: 0.95em;
+                margin-bottom: 8px;
+            }
+            select, input[type="number"] {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+            .calculate-btn {
+                padding: 10px 20px;
+                font-size: 1.1em;
+                width: 100%; /* Ensure full width on mobile */
+            }
+            .results {
+                margin-top: 20px;
+                padding-top: 20px;
+                font-size: 0.95em;
+            }
+            .results p {
+                margin-bottom: 10px;
+            }
+            .results strong {
+                font-size: 1.05em;
+            }
+            .advance-info {
+                font-size: 0.8em;
+            }
+            small {
+                font-size: 0.8em;
+            }
+
+            /* Loading screen adjustments for mobile */
+            .drone-animation {
+                width: 120px;
+                height: 120px;
+            }
+            .drone-body {
+                width: 60px;
+                height: 25px;
+                top: 48px;
+                left: 30px;
+            }
+            .propeller-arm {
+                height: 60px;
+            }
+            .propeller-arm.left-front { top: 15px; left: 15px; }
+            .propeller-arm.right-front { top: 15px; right: 15px; }
+            .propeller-arm.left-back { bottom: 15px; left: 15px; }
+            .propeller-arm.right-back { bottom: 15px; right: 15px; }
+            .propeller {
+                width: 50px;
+                height: 7px;
+                left: calc(50% - 25px);
+            }
+            .loading-text {
+                font-size: 1.2em;
+                margin-top: 20px;
+            }
         }
     </style>
 </head>
@@ -305,7 +439,7 @@
         <div class="input-group">
             <label for="shootingDays">Number of Shooting Days:</label>
             <input type="number" id="shootingDays" min="1" value="1">
-            <small style="color: #aaa; display: block; margin-top: 5px;">
+            <small>
                 *1 day: Free (Approval from Defence Ministry)<br>
                 *2 days: LKR 600 (Approval from Defence Ministry)<br>
                 *3 days: LKR 960 (Approval from Defence Ministry)
@@ -333,7 +467,7 @@
             other: 0 // "Other" will require discussion, so 0 for base calculation
         };
 
-        // Travel costs are directly from the provided document 
+        // Travel costs are directly from the provided document
         const travelCosts = {
             "Galle": 1930,
             "Matara": 2240,
