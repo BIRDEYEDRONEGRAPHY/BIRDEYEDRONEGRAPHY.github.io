@@ -7,12 +7,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #00ffc0;
-            --secondary-color: #051a2e;
-            --accent-color: #00ffd5;
-            --text-color: #e0fff8;
-            --background-dark: #0a0a0a;
-            --error-color: #ff6347;
+            /* Main brand colors */
+            --primary-color: #024959; /* Darker blue-green */
+            --secondary-color: #1C818C; /* Lighter blue-green */
+
+            /* Neutral colors */
+            --white-color: #ffffff;
+            --black-color: #000000;
+
+            /* Accent/Highlight color (derived from secondary for consistency) */
+            --accent-color: #27A6B6; /* Slightly brighter version of secondary for hover/focus */
+
+            /* Backgrounds */
+            --background-dark: #000000; /* Deep black for overall background */
+            --calculator-bg: rgba(2, 73, 89, 0.95); /* Slightly transparent primary color for calculator */
+            --input-bg: rgba(28, 129, 140, 0.2); /* Very light transparent secondary for inputs */
+
+            /* Text colors */
+            --text-main: var(--white-color);
+            --text-secondary: #e0f2f4; /* Off-white for general text */
+            --text-muted: #cccccc; /* Lighter grey for small text */
+            --error-color: #ff6347; /* Retain for warnings/errors */
         }
 
         body {
@@ -21,8 +36,8 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(to bottom right, var(--background-dark), #333333);
-            color: var(--primary-color);
+            background: linear-gradient(to bottom right, var(--black-color), #222222); /* Gradient from black */
+            color: var(--text-main);
             margin: 0;
             overflow: hidden;
             position: relative;
@@ -32,7 +47,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(circle, var(--primary-color) 1px, transparent 1px);
+            background-image: radial-gradient(circle, var(--secondary-color) 1px, transparent 1px);
             background-size: 20px 20px;
             opacity: 0.1;
             animation: moveBackground 20s linear infinite;
@@ -44,18 +59,18 @@
         }
 
         .calculator-container {
-            background-color: rgba(10, 25, 40, 0.9);
+            background-color: var(--calculator-bg);
             padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 0 50px rgba(0, 255, 192, 0.5);
+            box-shadow: 0 0 50px rgba(28, 129, 140, 0.5); /* Shadow using secondary color */
             width: 90%;
             max-width: 600px;
             text-align: center;
-            border: 2px solid var(--primary-color);
+            border: 2px solid var(--secondary-color); /* Border using secondary color */
             position: relative;
             z-index: 1;
             animation: fadeIn 1s ease-out;
-            box-sizing: border-box; /* Include padding in width */
+            box-sizing: border-box;
         }
 
         @keyframes fadeIn {
@@ -64,9 +79,9 @@
         }
 
         h1 {
-            color: var(--primary-color);
+            color: var(--white-color); /* White for main heading */
             margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(0, 255, 192, 0.7);
+            text-shadow: 0 0 15px rgba(28, 129, 140, 0.7); /* Shadow using secondary color */
             font-size: 2.2em;
         }
 
@@ -78,36 +93,36 @@
         label {
             display: block;
             margin-bottom: 10px;
-            color: var(--primary-color);
+            color: var(--secondary-color); /* Lighter blue-green for labels */
             font-size: 1.1em;
         }
 
         select, input[type="number"] {
-            width: 100%; /* Make them full width */
+            width: 100%;
             padding: 12px;
             margin-top: 5px;
-            border: 1px solid var(--primary-color);
+            border: 1px solid var(--secondary-color); /* Border using secondary color */
             border-radius: 8px;
-            background-color: var(--secondary-color);
-            color: var(--primary-color);
+            background-color: var(--input-bg); /* Transparent background for inputs */
+            color: var(--white-color); /* White text in inputs */
             font-size: 1em;
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
             cursor: pointer;
-            box-shadow: inset 0 0 8px rgba(0, 255, 192, 0.3);
-            box-sizing: border-box; /* Include padding in width */
+            box-shadow: inset 0 0 8px rgba(28, 129, 140, 0.3); /* Shadow using secondary color */
+            box-sizing: border-box;
         }
 
         select:focus, input[type="number"]:focus {
             outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 15px rgba(0, 255, 213, 0.7);
+            border-color: var(--accent-color); /* Accent color on focus */
+            box-shadow: 0 0 15px rgba(28, 129, 140, 0.7);
         }
 
         .calculate-btn {
-            background-color: var(--primary-color);
-            color: var(--secondary-color);
+            background-color: var(--secondary-color); /* Secondary color for button */
+            color: var(--white-color); /* White text on button */
             padding: 15px 30px;
             border: none;
             border-radius: 8px;
@@ -115,32 +130,32 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(0, 255, 192, 0.5);
-            width: 100%; /* Full width button for better mobile usability */
-            max-width: 300px; /* Limit max width for larger screens */
+            box-shadow: 0 0 20px rgba(28, 129, 140, 0.5);
+            width: 100%;
+            max-width: 300px;
         }
 
         .calculate-btn:hover {
-            background-color: var(--accent-color);
-            box-shadow: 0 0 30px rgba(0, 255, 213, 0.8);
+            background-color: var(--accent-color); /* Accent color on hover */
+            box-shadow: 0 0 30px rgba(28, 129, 140, 0.8);
             transform: translateY(-3px);
         }
 
         .results {
             margin-top: 30px;
             padding-top: 25px;
-            border-top: 1px dashed var(--primary-color);
+            border-top: 1px dashed var(--secondary-color); /* Border using secondary color */
             text-align: left;
             font-size: 1.1em;
         }
 
         .results p {
             margin-bottom: 12px;
-            color: var(--text-color);
+            color: var(--text-secondary); /* Off-white for general result text */
         }
 
         .results strong {
-            color: var(--primary-color);
+            color: var(--white-color); /* White for strong values */
             font-size: 1.2em;
         }
 
@@ -153,7 +168,7 @@
         }
 
         small {
-            color: #aaa;
+            color: var(--text-muted); /* Muted grey for small text */
             display: block;
             margin-top: 5px;
             font-size: 0.9em;
@@ -166,7 +181,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--background-dark);
+            background-color: var(--black-color);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -186,19 +201,19 @@
         .drone-body {
             width: 80px;
             height: 30px;
-            background-color: var(--primary-color);
+            background-color: var(--secondary-color); /* Drone body using secondary color */
             position: absolute;
             top: 60px;
             left: 35px;
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 255, 192, 0.7);
+            box-shadow: 0 0 20px rgba(28, 129, 140, 0.7);
         }
 
         .propeller-arm {
             position: absolute;
             width: 10px;
             height: 80px;
-            background-color: #555;
+            background-color: #555; /* Retain grey for arms for contrast */
             border-radius: 5px;
             transform-origin: bottom center;
         }
@@ -212,7 +227,7 @@
         .propeller {
             width: 60px;
             height: 8px;
-            background-color: #eee;
+            background-color: var(--white-color); /* White propellers */
             position: absolute;
             border-radius: 4px;
             top: -10px;
@@ -239,7 +254,7 @@
         }
 
         .loading-text {
-            color: var(--primary-color);
+            color: var(--secondary-color); /* Loading text using secondary color */
             font-size: 1.5em;
             margin-top: 30px;
             animation: pulseText 1.5s infinite alternate;
@@ -286,16 +301,16 @@
         /* Mobile devices (up to 767px) */
         @media (max-width: 767px) {
             body {
-                align-items: flex-start; /* Align to top for scrolling on small screens */
+                align-items: flex-start;
                 padding-top: 30px;
                 padding-bottom: 30px;
-                overflow-y: auto; /* Enable vertical scrolling */
+                overflow-y: auto;
             }
             .calculator-container {
                 padding: 20px;
-                width: 95%; /* More width for smaller screens */
-                max-width: none; /* Remove max-width restriction */
-                margin: 20px auto; /* Center with margin */
+                width: 95%;
+                max-width: none;
+                margin: 20px auto;
             }
             h1 {
                 font-size: 1.8em;
@@ -315,7 +330,7 @@
             .calculate-btn {
                 padding: 10px 20px;
                 font-size: 1.1em;
-                width: 100%; /* Ensure full width on mobile */
+                width: 100%;
             }
             .results {
                 margin-top: 20px;
@@ -467,7 +482,6 @@
             other: 0 // "Other" will require discussion, so 0 for base calculation
         };
 
-        // Travel costs are directly from the provided document
         const travelCosts = {
             "Galle": 1930,
             "Matara": 2240,
@@ -506,7 +520,7 @@
         const advancePayments = {
             1: 5000,
             2: 7000,
-            3: 7000 // For 3 days, advance is still 7000 as per common structure for multi-day
+            3: 7000 
         };
 
         function calculateCost() {
@@ -528,18 +542,14 @@
             }
 
             let baseCost = eventPrices[eventType];
-            let travelCost = travelCosts[location] || 0; // Default to 0 if location not found
+            let travelCost = travelCosts[location] || 0;
 
             let dayCost = 0;
             if (shootingDays in shootingDayCosts) {
                 dayCost = shootingDayCosts[shootingDays];
             } else if (shootingDays > 3) {
-                // For more than 3 days, you might want to define a specific logic
-                // For now, let's assume it caps at 3 days cost or scales.
-                // As per requirement, only 1, 2, 3 days costs are given.
-                // Let's keep it simple and advise discussion for >3 days.
                 alert("For more than 3 shooting days, please contact us for a custom quote regarding the Defence Ministry approval cost.");
-                dayCost = shootingDayCosts[3]; // Assume max cost for calculation
+                dayCost = shootingDayCosts[3];
             }
 
             const totalEstimatedPrice = baseCost + travelCost + dayCost;
@@ -548,7 +558,7 @@
             if (shootingDays === 1) {
                 advance = advancePayments[1];
             } else if (shootingDays >= 2) {
-                advance = advancePayments[2]; // For 2 or more days, it's 7000 LKR
+                advance = advancePayments[2];
             }
 
             document.getElementById('totalPrice').innerText = `LKR ${totalEstimatedPrice.toLocaleString()}/=`;
@@ -556,7 +566,6 @@
             document.getElementById('results').style.display = 'block';
         }
 
-        // Loading screen logic
         window.addEventListener('load', () => {
             const loadingScreen = document.getElementById('loadingScreen');
             const calculatorContainer = document.querySelector('.calculator-container');
@@ -566,8 +575,8 @@
                 setTimeout(() => {
                     loadingScreen.style.display = 'none';
                     calculatorContainer.style.display = 'block';
-                }, 500); // Wait for the fade out to complete
-            }, 2000); // Display loading screen for 2 seconds
+                }, 500);
+            }, 2000);
         });
     </script>
 </body>
