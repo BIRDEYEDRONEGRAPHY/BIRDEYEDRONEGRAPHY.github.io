@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drone Service Cost Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
         :root {
             /* Main brand colors */
@@ -91,7 +92,7 @@
             margin-bottom: 30px;
             text-shadow: 0 0 15px rgba(28, 129, 140, 0.7);
             font-size: 2.2em;
-            letter-spacing: 0.15em; /* Increased letter spacing */
+            letter-spacing: 0.15em;
         }
 
         .input-group {
@@ -106,7 +107,8 @@
             font-size: 1.1em;
         }
 
-        select, input[type="number"] {
+        /* Flatpickr input styling to match existing inputs */
+        .flatpickr-input, select, input[type="number"] {
             width: 100%;
             padding: 12px;
             margin-top: 5px;
@@ -121,21 +123,45 @@
             box-shadow: inset 0 0 8px rgba(28, 129, 140, 0.3);
             box-sizing: border-box;
             font-family: 'Rajdhani', sans-serif;
+            color: var(--white-color); /* Ensure text color is white */
         }
-
-        select {
-            color: var(--white-color);
-        }
-
-        input[type="number"] {
-            color: var(--white-color);
-        }
-
-        select:focus, input[type="number"]:focus {
+        
+        .flatpickr-input:focus, select:focus, input[type="number"]:focus {
             outline: none;
             border-color: var(--accent-color);
             box-shadow: 0 0 15px rgba(28, 129, 140, 0.7);
         }
+
+        /* Adjust Flatpickr calendar theme to match your dark theme (optional but recommended) */
+        .flatpickr-calendar {
+            background: var(--calculator-bg); /* Dark background */
+            border: 1px solid var(--secondary-color);
+            box-shadow: 0 0 20px rgba(28, 129, 140, 0.5);
+        }
+        .flatpickr-day.selected, .flatpickr-day.selected:hover, .flatpickr-day.startRange, .flatpickr-day.startRange:hover, .flatpickr-day.endRange, .flatpickr-day.endRange:hover {
+            background: var(--accent-color); /* Selected day color */
+            border-color: var(--accent-color);
+        }
+        .flatpickr-day.today {
+            border-color: var(--secondary-color);
+        }
+        .flatpickr-day:hover {
+            background: rgba(28, 129, 140, 0.5); /* Hover color */
+        }
+        .flatpickr-day.disabled, .flatpickr-day.disabled:hover {
+            color: var(--text-muted); /* Disabled day color */
+            opacity: 0.5;
+        }
+        .flatpickr-months .flatpickr-month, .flatpickr-weekdays, .flatpickr-weekday, .numInputWrapper {
+            color: var(--white-color);
+        }
+        .flatpickr-next-month, .flatpickr-prev-month {
+            color: var(--secondary-color);
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthItem.selected {
+            color: var(--accent-color);
+        }
+
 
         .calculate-btn {
             background-color: var(--secondary-color);
@@ -151,7 +177,7 @@
             width: 100%;
             max-width: 300px;
             font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 0.08em; /* Increased letter spacing for the button */
+            letter-spacing: 0.08em;
         }
 
         .calculate-btn:hover {
@@ -301,7 +327,7 @@
             label {
                 font-size: 1em;
             }
-            select, input[type="number"] {
+            .flatpickr-input, select, input[type="number"] {
                 padding: 10px;
                 font-size: 0.95em;
             }
@@ -350,7 +376,7 @@
                 font-size: 0.95em;
                 margin-bottom: 8px;
             }
-            select, input[type="number"] {
+            .flatpickr-input, select, input[type="number"] {
                 padding: 10px;
                 font-size: 0.9em;
             }
@@ -358,7 +384,7 @@
                 padding: 10px 20px;
                 font-size: 1.1em;
                 width: 100%;
-                letter-spacing: 0.05em; /* Slightly less letter spacing for mobile button */
+                letter-spacing: 0.05em;
             }
             .results {
                 margin-top: 20px;
@@ -481,6 +507,11 @@
         </div>
 
         <div class="input-group">
+            <label for="serviceDate">Date of Service:</label>
+            <input type="text" id="serviceDate" placeholder="Select a date">
+        </div>
+
+        <div class="input-group">
             <label for="shootingDays">Number of Shooting Days:</label>
             <input type="number" id="shootingDays" min="1" value="1">
             <small>
@@ -501,6 +532,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         const eventPrices = {
             wedding: 25000,
@@ -555,6 +587,7 @@
         function calculateCost() {
             const eventType = document.getElementById('eventType').value;
             const location = document.getElementById('location').value;
+            const serviceDate = document.getElementById('serviceDate').value; // Get the selected date
             const shootingDays = parseInt(document.getElementById('shootingDays').value);
 
             if (!eventType) {
@@ -563,6 +596,10 @@
             }
             if (!location) {
                 alert('Please select a location.');
+                return;
+            }
+            if (!serviceDate) { // Check if a date is selected
+                alert('Please select a date for the service.');
                 return;
             }
             if (shootingDays < 1) {
@@ -606,6 +643,57 @@
                     calculatorContainer.style.display = 'block';
                 }, 500);
             }, 2000);
+
+            // Date Picker Logic
+            const today = new Date();
+            const minSelectableDate = new Date();
+            minSelectableDate.setDate(today.getDate() + 7); // Set minimum date to 7 days from today
+
+            // Sri Lankan Poya and some public holidays for 2025
+            // Please verify these dates annually and add any other specific holy days.
+            const poyaHolyDays = [
+                "2025-01-14", // Duruthu Poya
+                "2025-02-04", // Independence Day
+                "2025-02-13", // Navam Poya
+                "2025-03-14", // Medin Poya
+                "2025-04-13", // Bak Poya
+                "2025-04-14", // Sinhala & Tamil New Year (second day)
+                "2025-05-01", // May Day
+                "2025-05-12", // Vesak Poya
+                "2025-05-13", // Day after Vesak Poya
+                "2025-06-11", // Poson Poya
+                "2025-07-10", // Esala Poya
+                "2025-08-09", // Nikini Poya
+                "2025-09-08", // Binara Poya
+                "2025-10-07", // Vap Poya / Milad un Nabi (approx. varies)
+                "2025-10-21", // Deepavali (approx. varies)
+                "2025-11-06", // Il Poya
+                "2025-12-05", // Unduvap Poya
+                "2025-12-25"  // Christmas Day
+            ];
+
+            flatpickr("#serviceDate", {
+                dateFormat: "Y-m-d",
+                minDate: minSelectableDate, // Enforce 7-day gap from current date
+                enable: [
+                    function(date) {
+                        // Enable Saturdays (getDay() === 6) and Sundays (getDay() === 0)
+                        const isWeekend = (date.getDay() === 0 || date.getDay() === 6);
+
+                        // Check if it's one of the predefined Poya/Holy days
+                        const isPoyaHolyDay = poyaHolyDays.some(poyaDateStr => {
+                            const poyaDate = new Date(poyaDateStr);
+                            // Compare year, month, and day for exact match
+                            return date.getFullYear() === poyaDate.getFullYear() &&
+                                   date.getMonth() === poyaDate.getMonth() &&
+                                   date.getDate() === poyaDate.getDate();
+                        });
+
+                        // Enable the date if it's a weekend OR a Poya/Holy day
+                        return isWeekend || isPoyaHolyDay;
+                    }
+                ]
+            });
         });
     </script>
 </body>
