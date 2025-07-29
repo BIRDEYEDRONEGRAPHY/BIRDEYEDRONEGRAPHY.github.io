@@ -132,7 +132,7 @@
             box-shadow: 0 0 15px rgba(28, 129, 140, 0.7);
         }
 
-        /* Adjust Flatpickr calendar theme to match your dark theme (optional but recommended) */
+        /* Flatpickr calendar theme to match your dark theme */
         .flatpickr-calendar {
             background: var(--calculator-bg); /* Dark background */
             border: 1px solid var(--secondary-color);
@@ -148,10 +148,16 @@
         .flatpickr-day:hover {
             background: rgba(28, 129, 140, 0.5); /* Hover color */
         }
-        .flatpickr-day.disabled, .flatpickr-day.disabled:hover {
-            color: var(--text-muted); /* Disabled day color */
-            opacity: 0.5;
+        
+        /* Styling for available dates (white) and disabled dates (grey-white) */
+        .flatpickr-day {
+            color: var(--white-color); /* Set default day text to white for available dates */
         }
+        .flatpickr-day.disabled, .flatpickr-day.disabled:hover {
+            color: var(--text-muted); /* Grey-white for disabled dates (from --text-muted: #cccccc) */
+            opacity: 0.5; /* Keep existing opacity for disabled state */
+        }
+
         .flatpickr-months .flatpickr-month, .flatpickr-weekdays, .flatpickr-weekday, .numInputWrapper {
             color: var(--white-color);
         }
@@ -587,7 +593,7 @@
         function calculateCost() {
             const eventType = document.getElementById('eventType').value;
             const location = document.getElementById('location').value;
-            const serviceDate = document.getElementById('serviceDate').value; // Get the selected date
+            const serviceDate = document.getElementById('serviceDate').value;
             const shootingDays = parseInt(document.getElementById('shootingDays').value);
 
             if (!eventType) {
@@ -598,7 +604,7 @@
                 alert('Please select a location.');
                 return;
             }
-            if (!serviceDate) { // Check if a date is selected
+            if (!serviceDate) {
                 alert('Please select a date for the service.');
                 return;
             }
@@ -674,22 +680,16 @@
 
             flatpickr("#serviceDate", {
                 dateFormat: "Y-m-d",
-                minDate: minSelectableDate, // Enforce 7-day gap from current date
+                minDate: minSelectableDate,
                 enable: [
                     function(date) {
-                        // Enable Saturdays (getDay() === 6) and Sundays (getDay() === 0)
                         const isWeekend = (date.getDay() === 0 || date.getDay() === 6);
-
-                        // Check if it's one of the predefined Poya/Holy days
                         const isPoyaHolyDay = poyaHolyDays.some(poyaDateStr => {
                             const poyaDate = new Date(poyaDateStr);
-                            // Compare year, month, and day for exact match
                             return date.getFullYear() === poyaDate.getFullYear() &&
                                    date.getMonth() === poyaDate.getMonth() &&
                                    date.getDate() === poyaDate.getDate();
                         });
-
-                        // Enable the date if it's a weekend OR a Poya/Holy day
                         return isWeekend || isPoyaHolyDay;
                     }
                 ]
