@@ -98,20 +98,29 @@
         }
 
         select, input[type="number"] {
-            width: 100%;
+            width: 100%; /* Make them full width */
             padding: 12px;
             margin-top: 5px;
             border: 1px solid var(--secondary-color); /* Border using secondary color */
             border-radius: 8px;
             background-color: var(--input-bg); /* Transparent background for inputs */
-            color: var(--white-color); /* White text in inputs */
             font-size: 1em;
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
             cursor: pointer;
             box-shadow: inset 0 0 8px rgba(28, 129, 140, 0.3); /* Shadow using secondary color */
-            box-sizing: border-box;
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        /* Specific color for the select dropdown text (selected value and options) */
+        select {
+            color: var(--black-color); /* Dark color for dropdown text for readability */
+        }
+
+        /* Keep input number text white as it was fine */
+        input[type="number"] {
+            color: var(--white-color);
         }
 
         select:focus, input[type="number"]:focus {
@@ -444,7 +453,7 @@
                 <option value="Makandura">Makandura - Rs. 3470</option>
                 <option value="Nuwara Eliya (Other)">Nuwara Eliya (Other) - Rs. 2740</option>
                 <option value="Anuradhapura (Other)">Anuradhapura (Other) - Rs. 2920</option>
-                <option value="Polonnaruwa (Other)">Polonnaruwa (Other) - Rs. 2860</option>
+                <option value="Polonnaruwa (Other)">Polonnawaruwa (Other) - Rs. 2860</option>
                 <option value="Trincomalee (Other)">Trincomalee (Other) - Rs. 3095</option>
                 <option value="Batticaloa (Other)">Batticaloa (Other) - Rs. 3215</option>
                 <option value="Kandy (Other)">Kandy (Other) - Rs. 2060</option>
@@ -505,7 +514,7 @@
             "Makandura": 3470,
             "Nuwara Eliya (Other)": 2740,
             "Anuradhapura (Other)": 2920,
-            "Polonnaruwa (Other)": 2860,
+            "Polonnawaruwa (Other)": 2860,
             "Trincomalee (Other)": 3095,
             "Batticaloa (Other)": 3215,
             "Kandy (Other)": 2060
@@ -520,7 +529,7 @@
         const advancePayments = {
             1: 5000,
             2: 7000,
-            3: 7000 
+            3: 7000
         };
 
         function calculateCost() {
