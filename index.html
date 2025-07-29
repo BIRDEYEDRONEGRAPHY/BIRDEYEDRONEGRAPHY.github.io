@@ -36,7 +36,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(to bottom right, var(--black-color), #222222); /* Gradient from black */
+            background: linear-gradient(to bottom right, var(--black-color), #222222);
             color: var(--text-main);
             margin: 0;
             overflow: hidden;
@@ -62,11 +62,11 @@
             background-color: var(--calculator-bg);
             padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 0 50px rgba(28, 129, 140, 0.5); /* Shadow using secondary color */
+            box-shadow: 0 0 50px rgba(28, 129, 140, 0.5);
             width: 90%;
             max-width: 600px;
             text-align: center;
-            border: 2px solid var(--secondary-color); /* Border using secondary color */
+            border: 2px solid var(--secondary-color);
             position: relative;
             z-index: 1;
             animation: fadeIn 1s ease-out;
@@ -78,10 +78,17 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .logo {
+            width: 200px; /* Adjust as needed */
+            height: auto;
+            margin-bottom: 20px; /* Space between logo and title */
+            filter: drop-shadow(0 0 10px rgba(28, 129, 140, 0.7)); /* Subtle glow for the logo */
+        }
+
         h1 {
-            color: var(--white-color); /* White for main heading */
+            color: var(--white-color);
             margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(28, 129, 140, 0.7); /* Shadow using secondary color */
+            text-shadow: 0 0 15px rgba(28, 129, 140, 0.7);
             font-size: 2.2em;
         }
 
@@ -93,24 +100,24 @@
         label {
             display: block;
             margin-bottom: 10px;
-            color: var(--secondary-color); /* Lighter blue-green for labels */
+            color: var(--secondary-color);
             font-size: 1.1em;
         }
 
         select, input[type="number"] {
-            width: 100%; /* Make them full width */
+            width: 100%;
             padding: 12px;
             margin-top: 5px;
-            border: 1px solid var(--secondary-color); /* Border using secondary color */
+            border: 1px solid var(--secondary-color);
             border-radius: 8px;
-            background-color: var(--input-bg); /* Transparent background for inputs */
+            background-color: var(--input-bg);
             font-size: 1em;
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
             cursor: pointer;
-            box-shadow: inset 0 0 8px rgba(28, 129, 140, 0.3); /* Shadow using secondary color */
-            box-sizing: border-box; /* Include padding in width */
+            box-shadow: inset 0 0 8px rgba(28, 129, 140, 0.3);
+            box-sizing: border-box;
         }
 
         /* Keep select text white (for the selected value in the box) */
@@ -125,13 +132,13 @@
 
         select:focus, input[type="number"]:focus {
             outline: none;
-            border-color: var(--accent-color); /* Accent color on focus */
+            border-color: var(--accent-color);
             box-shadow: 0 0 15px rgba(28, 129, 140, 0.7);
         }
 
         .calculate-btn {
-            background-color: var(--secondary-color); /* Secondary color for button */
-            color: var(--white-color); /* White text on button */
+            background-color: var(--secondary-color);
+            color: var(--white-color);
             padding: 15px 30px;
             border: none;
             border-radius: 8px;
@@ -145,7 +152,7 @@
         }
 
         .calculate-btn:hover {
-            background-color: var(--accent-color); /* Accent color on hover */
+            background-color: var(--accent-color);
             box-shadow: 0 0 30px rgba(28, 129, 140, 0.8);
             transform: translateY(-3px);
         }
@@ -153,18 +160,18 @@
         .results {
             margin-top: 30px;
             padding-top: 25px;
-            border-top: 1px dashed var(--secondary-color); /* Border using secondary color */
+            border-top: 1px dashed var(--secondary-color);
             text-align: left;
             font-size: 1.1em;
         }
 
         .results p {
             margin-bottom: 12px;
-            color: var(--text-secondary); /* Off-white for general result text */
+            color: var(--text-secondary);
         }
 
         .results strong {
-            color: var(--white-color); /* White for strong values */
+            color: var(--white-color);
             font-size: 1.2em;
         }
 
@@ -177,7 +184,7 @@
         }
 
         small {
-            color: var(--text-muted); /* Muted grey for small text */
+            color: var(--text-muted);
             display: block;
             margin-top: 5px;
             font-size: 0.9em;
@@ -210,7 +217,7 @@
         .drone-body {
             width: 80px;
             height: 30px;
-            background-color: var(--secondary-color); /* Drone body using secondary color */
+            background-color: var(--secondary-color);
             position: absolute;
             top: 60px;
             left: 35px;
@@ -222,7 +229,7 @@
             position: absolute;
             width: 10px;
             height: 80px;
-            background-color: #555; /* Retain grey for arms for contrast */
+            background-color: #555;
             border-radius: 5px;
             transform-origin: bottom center;
         }
@@ -236,7 +243,7 @@
         .propeller {
             width: 60px;
             height: 8px;
-            background-color: var(--white-color); /* White propellers */
+            background-color: var(--white-color);
             position: absolute;
             border-radius: 4px;
             top: -10px;
@@ -263,7 +270,7 @@
         }
 
         .loading-text {
-            color: var(--secondary-color); /* Loading text using secondary color */
+            color: var(--secondary-color);
             font-size: 1.5em;
             margin-top: 30px;
             animation: pulseText 1.5s infinite alternate;
@@ -281,6 +288,9 @@
             .calculator-container {
                 padding: 30px;
                 max-width: 550px;
+            }
+            .logo {
+                width: 180px;
             }
             h1 {
                 font-size: 2em;
@@ -320,6 +330,10 @@
                 width: 95%;
                 max-width: none;
                 margin: 20px auto;
+            }
+            .logo {
+                width: 150px; /* Smaller for mobile */
+                margin-bottom: 15px;
             }
             h1 {
                 font-size: 1.8em;
@@ -412,6 +426,7 @@
     <div class="background-effect"></div>
 
     <div class="calculator-container" style="display: none;">
+        <img src="Asset 4@4x.png" alt="Birdeye Drone Videography Logo" class="logo">
         <h1>Drone Service Cost Calculator</h1>
 
         <div class="input-group">
