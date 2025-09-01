@@ -1,45 +1,74 @@
-// CONFIG
-const username = "YOUR_GITHUB_USERNAME";
-const repo = "YOUR_REPO_NAME";
+const urlParams = new URLSearchParams(window.location.search);
+const folderId = urlParams.get("folderid");
+const folderName = urlParams.get("name");
+document.getElementById("category-title").textContent = folderName;
 
-// Get folder name from URL
-const params = new URLSearchParams(window.location.search);
-const folderName = params.get("name");
+let allFiles = [];
 
-document.getElementById("category-title").textContent = `🎬 ${folderName}`;
-
-const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folderName}`;
-
-async function fetchVideos() {
+async function loadFiles() {
   try {
-    const res = await fetch(apiUrl);
-    const files = await res.json();
+    const res = await fetch(`https://api.pcloud.com/showpublink?code=kZQcjD5ZxfejsmbRkQB0mSJff39JQmGz7yty`);
+    const data = await res.json();
 
-    const videosDiv = document.getElementById("videos");
+    if (!data.metadata || !data.metadata.contents) return;
 
-    for (let file of files) {
-      if (file.name.endsWith(".mp4") || file.name.endsWith(".mov")) {
-        const videoDiv = document.createElement("div");
-        videoDiv.classList.add("video-item");
+    const folder = data.metadata.contents.find(f => f.folderid == folderId);
+    if (!folder || !folder.contents) return;
 
-        const video = document.createElement("video");
-        video.src = file.download_url;
-        video.controls = true;
-
-        const download = document.createElement("a");
-        download.href = file.download_url;
-        download.textContent = "⬇ Download";
-        download.classList.add("download-btn");
-        download.download = file.name;
-
-        videoDiv.appendChild(video);
-        videoDiv.appendChild(download);
-        videosDiv.appendChild(videoDiv);
-      }
-    }
+    allFiles = folder.contents.filter(f => !f.isfolder);
+    renderFiles(allFiles);
   } catch (err) {
-    console.error("Error loading videos:", err);
+    console.error("Error loading files:", err);
   }
 }
 
-fetchVideos();
+async function renderFiles(files) {
+  const gallery = document.getElementById("gallery");
+  gallery.innerHTML = "";
+
+  for (let item of files) {
+    try {
+      const res = await fetch(`https://api.pcloud.com/getfilepublink?fileid=${item.fileid}`);
+      const linkData = await res.json();
+      const directLink = linkData.link;
+
+      const div = document.createElement("div");
+      if (item.name.match(/\.(mp4|mov)$/i)) {
+        div.dataset.type = "video";
+        const video = document.createElement("video");
+        video.src = directLink;
+        video.controls = true;
+        div.appendChild(video);
+      } else if (item.name.match(/\.(jpg|jpeg|png)$/i)) {
+        div.dataset.type = "image";
+        const img = document.createElement("img");
+        img.src = directLink;
+        img.alt = item.name;
+        div.appendChild(img);
+      }
+
+      const download = document.createElement("a");
+      download.href = directLink;
+      download.textContent = "⬇ Download";
+      download.className = "download-btn";
+      download.download = item.name;
+      div.appendChild(download);
+
+      gallery.appendChild(div);
+    } catch (err) {
+      console.error("Error rendering file:", err);
+    }
+  }
+}
+
+function filterFiles(type) {
+  if (type === "all") {
+    renderFiles(allFiles);
+  } else if (type === "images") {
+    renderFiles(allFiles.filter(f => f.name.match(/\.(jpg|jpeg|png)$/i)));
+  } else if (type === "videos") {
+    renderFiles(allFiles.filter(f => f.name.match(/\.(mp4|mov)$/i)));
+  }
+}
+
+loadFiles();
