@@ -7,15 +7,12 @@ let allFiles = [];
 
 async function loadFiles() {
   try {
-    const res = await fetch(`https://api.pcloud.com/showpublink?code=kZQcjD5ZxfejsmbRkQB0mSJff39JQmGz7yty`);
+    const res = await fetch(`https://api.pcloud.com/listpublink?code=kZQcjD5ZxfejsmbRkQB0mSJff39JQmGz7yty&folderid=${folderId}`);
     const data = await res.json();
 
     if (!data.metadata || !data.metadata.contents) return;
 
-    const folder = data.metadata.contents.find(f => f.folderid == folderId);
-    if (!folder || !folder.contents) return;
-
-    allFiles = folder.contents.filter(f => !f.isfolder);
+    allFiles = data.metadata.contents.filter(f => !f.isfolder);
     renderFiles(allFiles);
   } catch (err) {
     console.error("Error loading files:", err);
@@ -33,6 +30,7 @@ async function renderFiles(files) {
       const directLink = linkData.link;
 
       const div = document.createElement("div");
+
       if (item.name.match(/\.(mp4|mov)$/i)) {
         div.dataset.type = "video";
         const video = document.createElement("video");
