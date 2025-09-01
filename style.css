@@ -1,106 +1,78 @@
-/* General */
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  background: #0d1b2a; /* dark navy */
-  color: #e0e1dd;
+  font-family: Arial, sans-serif;
+  background-color: #0d1b2a;
+  color: #ffffff;
+  text-align: center;
 }
 
-header, footer {
-  text-align: center;
-  padding: 1rem;
+header {
   background: #1b263b;
-  color: #e0e1dd;
+  padding: 20px;
 }
 
 header .logo {
-  max-width: 120px;
+  height: 60px;
 }
 
-h1, h2 {
-  color: #00b4d8; /* teal */
-}
-
-a {
+h1 {
   color: #00b4d8;
-  text-decoration: none;
+  margin: 10px 0;
 }
 
-a:hover {
-  text-decoration: underline;
+main {
+  padding: 20px;
 }
 
-/* Categories */
-.categories {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-  padding: 1rem;
+h2 {
+  margin-bottom: 20px;
+  color: #00b4d8;
 }
 
-.category-card {
-  background: #1b263b;
-  padding: 1rem;
-  border-radius: 12px;
-  text-align: center;
-  transition: transform 0.2s;
-}
-
-.category-card:hover {
-  transform: scale(1.05);
-  background: #415a77;
-}
-
-/* Gallery */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  padding: 1rem;
-}
-
-.gallery div {
-  background: #1b263b;
-  padding: 0.5rem;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.gallery img, .gallery video {
-  max-width: 100%;
-  border-radius: 10px;
-}
-
-.download-btn {
-  display: inline-block;
-  margin-top: 0.5rem;
-  padding: 0.4rem 0.8rem;
-  background: #00b4d8;
-  color: white;
-  border-radius: 6px;
-  text-decoration: none;
-}
-
-.download-btn:hover {
-  background: #0077b6;
-}
-
-/* Filters */
 .filters {
-  text-align: center;
-  margin: 1rem;
+  margin-bottom: 20px;
 }
 
 .filters button {
-  margin: 0 0.5rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  background: #00b4d8;
-  color: white;
+  background: #1b263b;
+  color: #ffffff;
+  border: 1px solid #00b4d8;
+  margin: 0 5px;
+  padding: 8px 15px;
   cursor: pointer;
+  border-radius: 8px;
 }
 
 .filters button:hover {
-  background: #0077b6;
+  background: #00b4d8;
+  color: #0d1b2a;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.gallery-item {
+  background: #1b263b;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.gallery-item img,
+.gallery-item video {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.download-btn {
+  display: block;
+  margin-top: 10px;
+  background: #00b4d8;
+  padding: 8px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #0d1b2a;
+  font-weight: bold;
 }
