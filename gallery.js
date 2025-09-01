@@ -1,18 +1,22 @@
-const urlParams = new URLSearchParams(window.location.search);
-const folderId = urlParams.get("folderid");
-const folderName = urlParams.get("name");
-document.getElementById("category-title").textContent = folderName;
-
+const pcloudCode = "kZQcjD5ZxfejsmbRkQB0mSJff39JQmGz7yty";
 let allFiles = [];
 
 async function loadFiles() {
   try {
-    const res = await fetch(`https://api.pcloud.com/listpublink?code=kZQcjD5ZxfejsmbRkQB0mSJff39JQmGz7yty&folderid=${folderId}`);
+    // Step 1: Get root folder ID
+    const res = await fetch(`https://api.pcloud.com/showpublink?code=${pcloudCode}`);
     const data = await res.json();
 
-    if (!data.metadata || !data.metadata.contents) return;
+    if (!data.metadata || !data.metadata.folderid) return;
+    const folderId = data.metadata.folderid;
 
-    allFiles = data.metadata.contents.filter(f => !f.isfolder);
+    // Step 2: Get files inside this folder
+    const res2 = await fetch(`https://api.pcloud.com/listpublink?code=${pcloudCode}&folderid=${folderId}`);
+    const folderData = await res2.json();
+
+    if (!folderData.metadata || !folderData.metadata.contents) return;
+
+    allFiles = folderData.metadata.contents.filter(f => !f.isfolder);
     renderFiles(allFiles);
   } catch (err) {
     console.error("Error loading files:", err);
@@ -25,11 +29,13 @@ async function renderFiles(files) {
 
   for (let item of files) {
     try {
+      // Step 3: Get direct download/preview link
       const res = await fetch(`https://api.pcloud.com/getfilepublink?fileid=${item.fileid}`);
       const linkData = await res.json();
       const directLink = linkData.link;
 
       const div = document.createElement("div");
+      div.className = "gallery-item";
 
       if (item.name.match(/\.(mp4|mov)$/i)) {
         div.dataset.type = "video";
