@@ -48,21 +48,30 @@ h1 {
   gap: 1.5rem;
 }
 
-.category {
+.category-card {
   background: white;
   border-radius: 12px;
-  padding: 1rem;
+  padding: 2rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.2s;
+  cursor: pointer;
 }
 
-.category h2 {
+.category-card:hover {
+  transform: translateY(-5px);
+  background: #f0f0f0;
+}
+
+.category-card h2 {
   font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-  text-align: center;
 }
 
 .video-item {
-  margin-bottom: 1rem;
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 video {
