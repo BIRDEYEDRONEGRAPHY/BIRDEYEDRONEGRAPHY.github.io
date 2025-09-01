@@ -1,59 +1,37 @@
 // CONFIG: Update with your GitHub repo details
 const username = "YOUR_GITHUB_USERNAME";
 const repo = "YOUR_REPO_NAME";
-const branch = "main"; // or "master"
 
-// GitHub API to list repo contents
 const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/`;
 
-async function fetchGallery() {
+async function fetchCategories() {
   try {
     const res = await fetch(apiUrl);
     const folders = await res.json();
 
-    const gallery = document.getElementById("gallery");
+    const categoriesDiv = document.getElementById("categories");
 
     for (let folder of folders) {
       if (folder.type === "dir") {
-        // Create category card
-        const categoryDiv = document.createElement("div");
-        categoryDiv.classList.add("category");
+        const card = document.createElement("div");
+        card.classList.add("category-card");
 
         const title = document.createElement("h2");
         title.textContent = folder.name;
-        categoryDiv.appendChild(title);
 
-        // Fetch videos inside folder
-        const filesRes = await fetch(folder.url);
-        const files = await filesRes.json();
+        card.appendChild(title);
 
-        for (let file of files) {
-          if (file.name.endsWith(".mp4") || file.name.endsWith(".mov")) {
-            const videoDiv = document.createElement("div");
-            videoDiv.classList.add("video-item");
+        // When clicked → go to category.html with ?name=folder.name
+        card.addEventListener("click", () => {
+          window.location.href = `category.html?name=${folder.name}`;
+        });
 
-            const video = document.createElement("video");
-            video.src = file.download_url;
-            video.controls = true;
-
-            const download = document.createElement("a");
-            download.href = file.download_url;
-            download.textContent = "⬇ Download";
-            download.classList.add("download-btn");
-            download.download = file.name;
-
-            videoDiv.appendChild(video);
-            videoDiv.appendChild(download);
-            categoryDiv.appendChild(videoDiv);
-          }
-        }
-
-        gallery.appendChild(categoryDiv);
+        categoriesDiv.appendChild(card);
       }
     }
   } catch (err) {
-    console.error("Error loading gallery:", err);
+    console.error("Error loading categories:", err);
   }
 }
 
-fetchGallery();
+fetchCategories();
