@@ -12,7 +12,7 @@ body {
 }
 
 header {
-  background: #222;
+  background: #16444C; /* Dark Navy */
   color: white;
   padding: 1rem 2rem;
   display: flex;
@@ -27,7 +27,7 @@ header .logo {
 
 header .contact p, 
 header .contact a {
-  color: #ddd;
+  color: #dcecec;
   font-size: 0.9rem;
 }
 
@@ -40,6 +40,7 @@ main {
 h1 {
   text-align: center;
   margin-bottom: 1.5rem;
+  color: #0A7B83; /* Teal */
 }
 
 .gallery {
@@ -54,17 +55,19 @@ h1 {
   padding: 2rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   text-align: center;
-  transition: transform 0.2s;
+  transition: transform 0.2s, background 0.2s;
   cursor: pointer;
+  border: 2px solid #0A7B83; /* Accent border */
 }
 
 .category-card:hover {
   transform: translateY(-5px);
-  background: #f0f0f0;
+  background: #E6F7F8; /* Light teal background on hover */
 }
 
 .category-card h2 {
   font-size: 1.2rem;
+  color: #16444C;
 }
 
 .video-item {
@@ -72,6 +75,7 @@ h1 {
   padding: 1rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-left: 5px solid #0A7B83;
 }
 
 video {
@@ -83,7 +87,7 @@ video {
   display: inline-block;
   margin-top: 0.5rem;
   padding: 0.4rem 0.8rem;
-  background: #222;
+  background: #0A7B83; /* Teal */
   color: white;
   text-decoration: none;
   border-radius: 6px;
@@ -92,11 +96,11 @@ video {
 }
 
 .download-btn:hover {
-  background: #444;
+  background: #16444C; /* Dark Navy */
 }
 
 footer {
-  background: #222;
+  background: #16444C;
   color: #ccc;
   text-align: center;
   padding: 1rem;
